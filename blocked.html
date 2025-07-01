@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Site Blocked</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .container {
+      max-width: 600px;
+      background-color: white;
+      border-radius: 8px;
+      padding: 40px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+      color: #ea4335;
+    }
+    
+    h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #ea4335;
+    }
+    
+    p {
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 30px;
+      color: #555;
+    }
+    
+    .site-info {
+      background-color: #f9f9f9;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 30px;
+      font-weight: 500;
+    }
+    
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+    
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background-color 0.2s;
+    }
+    
+    .btn-primary {
+      background-color: #4285f4;
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: #3367d6;
+    }
+    
+    .btn-secondary {
+      background-color: #f1f1f1;
+      color: #333;
+    }
+    
+    .btn-secondary:hover {
+      background-color: #e2e2e2;
+    }
+    
+    .timer {
+      margin-top: 30px;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">⛔</div>
+    <h1>Site Blocked</h1>
+    <p>This site has been blocked by the Productivity Manager extension because it's on your list of distracting websites.</p>
+    
+    <div class="site-info" id="site-url">Loading...</div>
+    
+    <p>You can either go back to the previous page or continue to this site for a limited time.</p>
+    
+    <div class="buttons">
+      <button id="go-back" class="btn btn-primary">Go Back</button>
+      <button id="continue-anyway" class="btn btn-secondary">Continue Anyway (5 min)</button>
+      <button id="unblock-site" class="btn btn-secondary">Unblock This Site</button>
+    </div>
+    
+    <div class="timer" id="continue-timer" style="display: none;">
+      You can access this site for <span id="time-remaining">5:00</span>
+    </div>
+  </div>
+  
+  <script>
+    // DOM elements
+    const siteUrlElement = document.getElementById('site-url');
+    const goBackButton = document.getElementById('go-back');
+    const continueAnywayButton = document.getElementById('continue-anyway');
+    const unblockSiteButton = document.getElementById('unblock-site');
+    const continueTimerElement = document.getElementById('continue-timer');
+    const timeRemainingElement = document.getElementById('time-remaining');
+    
+    // Get the blocked URL from the referrer or query parameter
+    let blockedUrl = document.referrer;
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('url')) {
+      blockedUrl = urlParams.get('url');
+    }
+    
+    // Display the blocked URL
+    if (blockedUrl) {
+      try {
+        const url = new URL(blockedUrl);
+        siteUrlElement.textContent = url.hostname;
+      } catch (error) {
+        siteUrlElement.textContent = blockedUrl;
+      }
+    } else {
+      siteUrlElement.textContent = 'Unknown site';
+    }
+    
+    // Go back button
+    goBackButton.addEventListener('click', () => {
+      window.history.back();
+    });
+    
+    // Continue anyway button (temporary access)
+    continueAnywayButton.addEventListener('click', () => {
+      // Show timer
+      continueTimerElement.style.display = 'block';
+      
+      // Disable continue button
+      continueAnywayButton.disabled = true;
+      
+      // Start countdown
+      let timeLeft = 5 * 60; // 5 minutes in seconds
+      const countdownInterval = setInterval(() => {
+        timeLeft--;
+        
+        // Update timer display
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timeRemainingElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        
+        // Check if time is up
+        if (timeLeft <= 0) {
+          clearInterval(countdownInterval);
+          window.location.href = 'blocked.html'; // Redirect back to blocked page
+        }
+      }, 1000);
+      
+      // Navigate to the blocked site
+      if (blockedUrl) {
+        window.location.href = blockedUrl;
+      }
+    });
+    
+    // Unblock site button
+    unblockSiteButton.addEventListener('click', async () => {
+      if (blockedUrl) {
+        try {
+          const url = new URL(blockedUrl);
+          const hostname = url.hostname;
+          
+          // Send message to background script to unblock the site
+          chrome.runtime.sendMessage({
+            action: 'blockSite',
+            hostname: hostname,
+            shouldBlock: false
+          }, (response) => {
+            if (response && response.success) {
+              // Navigate to the unblocked site
+              window.location.href = blockedUrl;
+            }
+          });
+        } catch (error) {
+          console.error('Error unblocking site:', error);
+        }
+      }
+    });
+  </script>
+</body>
+</html>

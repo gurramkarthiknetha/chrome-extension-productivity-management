@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Productivity Manager Settings</title>
+  <link rel="stylesheet" href="css/options.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Productivity Manager Settings</h1>
+    </header>
+    
+    <main>
+      <section class="settings-section">
+        <h2>General Settings</h2>
+        
+        <div class="setting-item">
+          <label for="track-incognito">
+            <input type="checkbox" id="track-incognito">
+            Track incognito browsing
+          </label>
+          <p class="setting-description">Enable tracking in incognito mode (requires permission)</p>
+        </div>
+        
+        <div class="setting-item">
+          <label for="sync-data">
+            <input type="checkbox" id="sync-data">
+            Sync data across devices
+          </label>
+          <p class="setting-description">Synchronize your productivity data across all your devices</p>
+        </div>
+        
+        <div class="setting-item">
+          <label for="show-notifications">
+            <input type="checkbox" id="show-notifications">
+            Show notifications
+          </label>
+          <p class="setting-description">Display notifications for productivity insights and alerts</p>
+        </div>
+      </section>
+      
+      <section class="settings-section">
+        <h2>Productivity Goals</h2>
+        
+        <div class="setting-item">
+          <label for="daily-productive-goal">Daily productive time goal (hours)</label>
+          <input type="number" id="daily-productive-goal" min="0" max="24" step="0.5">
+        </div>
+        
+        <div class="setting-item">
+          <label for="daily-distracting-limit">Daily distracting time limit (hours)</label>
+          <input type="number" id="daily-distracting-limit" min="0" max="24" step="0.5">
+        </div>
+      </section>
+      
+      <section class="settings-section">
+        <h2>Site Management</h2>
+        
+        <div class="tabs">
+          <button class="tab-button active" data-tab="blocked">Blocked Sites</button>
+          <button class="tab-button" data-tab="productive">Productive Sites</button>
+          <button class="tab-button" data-tab="distracting">Distracting Sites</button>
+        </div>
+        
+        <div class="tab-content active" id="blocked-tab">
+          <div class="site-list-container">
+            <ul id="blocked-sites-list" class="site-list"></ul>
+            <div class="add-site">
+              <input type="text" id="add-blocked-site" placeholder="Enter website domain (e.g., facebook.com)">
+              <button id="add-blocked-site-btn" class="btn btn-primary">Add</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="tab-content" id="productive-tab">
+          <div class="site-list-container">
+            <ul id="productive-sites-list" class="site-list"></ul>
+            <div class="add-site">
+              <input type="text" id="add-productive-site" placeholder="Enter website domain (e.g., github.com)">
+              <button id="add-productive-site-btn" class="btn btn-primary">Add</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="tab-content" id="distracting-tab">
+          <div class="site-list-container">
+            <ul id="distracting-sites-list" class="site-list"></ul>
+            <div class="add-site">
+              <input type="text" id="add-distracting-site" placeholder="Enter website domain (e.g., youtube.com)">
+              <button id="add-distracting-site-btn" class="btn btn-primary">Add</button>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <section class="settings-section">
+        <h2>Data Management</h2>
+        
+        <div class="setting-item">
+          <button id="export-data" class="btn btn-secondary">Export Data</button>
+          <p class="setting-description">Export your productivity data as a JSON file</p>
+        </div>
+        
+        <div class="setting-item">
+          <button id="import-data" class="btn btn-secondary">Import Data</button>
+          <p class="setting-description">Import previously exported productivity data</p>
+          <input type="file" id="import-file" accept=".json" style="display: none;">
+        </div>
+        
+        <div class="setting-item">
+          <button id="clear-data" class="btn btn-danger">Clear All Data</button>
+          <p class="setting-description">Delete all your productivity data (cannot be undone)</p>
+        </div>
+      </section>
+    </main>
+    
+    <footer>
+      <button id="save-settings" class="btn btn-primary">Save Settings</button>
+      <div id="status-message"></div>
+    </footer>
+  </div>
+  
+  <script src="js/options.js"></script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Productivity Dashboard</title>
+  <link rel="stylesheet" href="css/dashboard.css">
+  <!-- Include Chart.js for visualizations -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Productivity Dashboard</h1>
+      <div class="date-selector">
+        <button id="prev-day" class="btn btn-icon">◀</button>
+        <span id="selected-date">Today</span>
+        <button id="next-day" class="btn btn-icon">▶</button>
+      </div>
+    </header>
+    
+    <main>
+      <section class="dashboard-section summary-section">
+        <h2>Daily Summary</h2>
+        <div class="summary-cards">
+          <div class="summary-card">
+            <div class="card-icon productive-icon">⏱️</div>
+            <div class="card-content">
+              <h3>Productive Time</h3>
+              <p id="productive-time" class="card-value">0h 0m</p>
+              <p id="productive-percentage" class="card-percentage">0%</p>
+            </div>
+          </div>
+          
+          <div class="summary-card">
+            <div class="card-icon neutral-icon">⚖️</div>
+            <div class="card-content">
+              <h3>Neutral Time</h3>
+              <p id="neutral-time" class="card-value">0h 0m</p>
+              <p id="neutral-percentage" class="card-percentage">0%</p>
+            </div>
+          </div>
+          
+          <div class="summary-card">
+            <div class="card-icon distracting-icon">⚠️</div>
+            <div class="card-content">
+              <h3>Distracting Time</h3>
+              <p id="distracting-time" class="card-value">0h 0m</p>
+              <p id="distracting-percentage" class="card-percentage">0%</p>
+            </div>
+          </div>
+          
+          <div class="summary-card">
+            <div class="card-icon total-icon">🕒</div>
+            <div class="card-content">
+              <h3>Total Tracked</h3>
+              <p id="total-time" class="card-value">0h 0m</p>
+              <p id="sites-visited" class="card-percentage">0 sites</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <section class="dashboard-section charts-section">
+        <div class="chart-container">
+          <h2>Time Distribution</h2>
+          <canvas id="time-distribution-chart"></canvas>
+        </div>
+        
+        <div class="chart-container">
+          <h2>Hourly Activity</h2>
+          <canvas id="hourly-activity-chart"></canvas>
+        </div>
+      </section>
+      
+      <section class="dashboard-section sites-section">
+        <h2>Top Sites</h2>
+        <div class="tabs">
+          <button class="tab-button active" data-tab="all">All Sites</button>
+          <button class="tab-button" data-tab="productive">Productive</button>
+          <button class="tab-button" data-tab="neutral">Neutral</button>
+          <button class="tab-button" data-tab="distracting">Distracting</button>
+        </div>
+        
+        <div class="tab-content active" id="all-tab">
+          <div class="sites-list-container">
+            <ul id="all-sites-list" class="sites-list"></ul>
+          </div>
+        </div>
+        
+        <div class="tab-content" id="productive-tab">
+          <div class="sites-list-container">
+            <ul id="productive-sites-list" class="sites-list"></ul>
+          </div>
+        </div>
+        
+        <div class="tab-content" id="neutral-tab">
+          <div class="sites-list-container">
+            <ul id="neutral-sites-list" class="sites-list"></ul>
+          </div>
+        </div>
+        
+        <div class="tab-content" id="distracting-tab">
+          <div class="sites-list-container">
+            <ul id="distracting-sites-list" class="sites-list"></ul>
+          </div>
+        </div>
+      </section>
+      
+      <section class="dashboard-section insights-section">
+        <h2>Productivity Insights</h2>
+        <div id="insights-container">
+          <div class="insight-card">
+            <h3>Loading insights...</h3>
+            <p>Please wait while we analyze your browsing data.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+    
+    <footer>
+      <button id="open-options" class="btn btn-secondary">Settings</button>
+      <button id="export-report" class="btn btn-primary">Export Report</button>
+    </footer>
+  </div>
+  
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
